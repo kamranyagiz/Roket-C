@@ -1,0 +1,62 @@
+#include <stdio.h>
+
+void convolution(int image[][100], int m, int n, int filter[][100], int k, int result[][100]) {
+    // Konvolüsyon işlemi uygulayan fonksiyon
+    int sum; // Toplama işlemi için geçici değişken
+    for(int i=0; i<=m-k; i++) {
+        for(int j=0; j<=n-k; j++) {
+            sum = 0;
+            for(int x=0; x<k; x++) {
+                for(int y=0; y<k; y++) {
+                    sum += image[i+x][j+y] * filter[x][y];
+                }
+            }
+            result[i][j] = sum / (k*k); // Ortalama alma işlemi
+        }
+    }
+}
+
+void print_matrix(int matrix[][100], int m, int n) {
+    // Matrisi ekrana yazdırmak için yardımcı fonksiyon
+    for(int i=0; i<m; i++) {
+        for(int j=0; j<n; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int m, n; // Görüntü boyutu
+    int image[100][100]; // Görüntü matrisi
+    int k; // Filtre boyutu
+    int filter[100][100]; // Filtre matrisi
+    int result[100][100]; // Sonuç matrisi
+
+    printf("Görüntü boyutunu girin (MxN): ");
+    scanf("%dx%d", &m, &n);
+
+    printf("Görüntü elemanlarını girin:\n");
+    for(int i=0; i<m; i++) {
+        for(int j=0; j<n; j++) {
+            scanf("%d", &image[i][j]);
+        }
+    }
+
+    printf("Filtre boyutunu girin (kxk): ");
+    scanf("%dx%d", &k, &k);
+
+    printf("Filtre elemanlarını girin:\n");
+    for(int i=0; i<k; i++) {
+        for(int j=0; j<k; j++) {
+            scanf("%d", &filter[i][j]);
+        }
+    }
+
+    convolution(image, m, n, filter, k, result);
+
+    printf("Konvolüsyon sonrası görüntü matrisi:\n");
+    print_matrix(result, m-k+1, n-k+1);
+
+    return 0;
+}
