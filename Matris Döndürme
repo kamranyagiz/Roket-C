@@ -1,0 +1,69 @@
+#include <stdio.h>
+
+void print_matrix(int matrix[][100], int n) {
+    // Matrisi ekrana yazdırmak için yardımcı fonksiyon
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<n; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void rotate_matrix(int matrix[][100], int n, char direction) {
+    int temp; // Geçici değişken
+    if(direction == 'r' || direction == 'R') {
+        // Sağa döndürme işlemi
+        for(int i=0; i<n/2; i++) {
+            for(int j=i; j<n-i-1; j++) {
+                temp = matrix[i][j];
+                matrix[i][j] = matrix[n-j-1][i];
+                matrix[n-j-1][i] = matrix[n-i-1][n-j-1];
+                matrix[n-i-1][n-j-1] = matrix[j][n-i-1];
+                matrix[j][n-i-1] = temp;
+            }
+        }
+    } else if(direction == 'l' || direction == 'L') {
+        // Sola döndürme işlemi
+        for(int i=0; i<n/2; i++) {
+            for(int j=i; j<n-i-1; j++) {
+                temp = matrix[i][j];
+                matrix[i][j] = matrix[j][n-i-1];
+                matrix[j][n-i-1] = matrix[n-i-1][n-j-1];
+                matrix[n-i-1][n-j-1] = matrix[n-j-1][i];
+                matrix[n-j-1][i] = temp;
+            }
+        }
+    } else {
+        printf("Hatalı yön girdiniz! Yön sadece 'r' veya 'l' olabilir.\n");
+    }
+}
+
+int main() {
+    int n;
+    int matrix[100][100];
+    char direction;
+
+    printf("Matris boyutunu girin: ");
+    scanf("%d", &n);
+
+    printf("Matris elemanlarını girin:\n");
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<n; j++) {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+
+    printf("Matrisi hangi yöne döndürmek istersiniz? (r = sağa, l = sola): ");
+    scanf(" %c", &direction);
+
+    printf("Önceki matris:\n");
+    print_matrix(matrix, n);
+
+    rotate_matrix(matrix, n, direction);
+
+    printf("Döndürülmüş matris:\n");
+    print_matrix(matrix, n);
+
+    return 0;
+}
