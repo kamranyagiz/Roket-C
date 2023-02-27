@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+#define MAX_GUESSES 10
+#define MAX_WORD_LEN 20
+
+void printword(char word[], int len, int correct[]) {
+    int i;
+    for (i = 0; i < len; i++) {
+        if (correct[i]) {
+            printf("%c ", word[i]);
+        } else {
+            printf(" ");
+        }
+    }
+}
+
+int check_guess(char word[], int len, char guess[], int correct[]) {
+    int i, j, correct_count = 0;
+    for (i = 0; i < len; i++) {
+        for (j = 0; j < len; j++) {
+            if (guess[i] == word[j] && i == j) {
+                correct[i] = 1;
+                correct_count++;
+            } else if (guess[i] == word[j]) {
+                break;
+            }
+        }
+    }
+    return correct_count;
+}
+
+int main() {
+    char word[MAX_WORD_LEN + 1], guess[MAX_WORD_LEN + 1];
+    int i, len, correct[MAX_WORD_LEN] = {0}, guesses_left = MAX_GUESSES, correct_count = 0;
+
+    srand(time(NULL));
+    printf("Hedef kelime: ");
+    scanf("%s", word);
+    len = strlen(word);
+    printf("Kelimeniz %d harfli.\n", len);
+    print_word(word, len, correct);
+    printf("\n");
+
+    while (guesses_left > 0 && correct_count < len) {
+        printf("Tahmininiz (%d hakkınız var): ", guesses_left);
+        scanf("%s", guess);
+        correct_count = check_guess(word, len, guess, correct);
+        if (correct_count == len) {
+            printf("%s\n", word);
+            printf("Tebrikler! Kelimeyi buldunuz.\n");
+        } else {
+            printf("Çıktı: ");
+            print_word(word, len, correct);
+            printf("\n");
+            guesses_left--;
+        }
+    }
+
+    if (guesses_left == 0 && correct_count < len) {
+        printf("Oyunu kaybettiniz. Doğru kelime: %s\n", word);
+    }
+
+    return 0;
+}
